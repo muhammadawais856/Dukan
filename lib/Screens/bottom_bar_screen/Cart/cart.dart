@@ -1,3 +1,4 @@
+import 'package:dokan_retailer/Screens/bottom_bar_screen/Cart/checkout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:dokan_retailer/models/model.dart';
@@ -281,7 +282,12 @@ class _cartState extends State<cart> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => checkout()),
+                      );
+                    },
                     child: const Text(
                       "Buy Now",
                       style: TextStyle(

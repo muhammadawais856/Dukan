@@ -52,3 +52,30 @@ class cartitem {
     required this.img,
   });
 }
+
+class BillModel {
+  final String userName;
+  final List<ItemModel> items;
+  final int itemsPrice;
+  final int discount;
+  final int totalBill;
+  final String reference;
+  final String dateTime;
+
+  BillModel({
+    required this.userName,
+    required this.items,
+    required this.itemsPrice,
+    required this.discount,
+    required this.totalBill,
+    required this.reference,
+    required this.dateTime,
+  });
+}
+
+class ItemModel {
+  final String name;
+  final int qty;
+
+  ItemModel({required this.name, required this.qty});
+}

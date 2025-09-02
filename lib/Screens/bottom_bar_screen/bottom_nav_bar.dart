@@ -1,5 +1,5 @@
 
-import 'package:dokan_retailer/Screens/bottom_bar_screen/cart.dart';
+import 'package:dokan_retailer/Screens/bottom_bar_screen/Cart/cart.dart';
 import 'package:dokan_retailer/Screens/bottom_bar_screen/homescreen/home.dart';
 import 'package:dokan_retailer/Screens/bottom_bar_screen/order.dart';
 import 'package:dokan_retailer/Screens/bottom_bar_screen/profile.dart';
