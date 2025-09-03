@@ -1,6 +1,7 @@
 
 import 'package:dokan_retailer/Screens/Auth/login.dart';
 import 'package:dokan_retailer/Screens/bottom_bar_screen/homescreen/wheat.dart';
+import 'package:dokan_retailer/Screens/notification.dart';
 import 'package:dokan_retailer/models/model.dart';
 import 'package:flutter/material.dart';
 
@@ -50,7 +51,14 @@ class _homeState extends State<home> {
 
             Padding(
               padding: const EdgeInsets.only(right: 20.5),
-              child: Image.asset("Assets/images/notification.png",height: 24,width: 24,),
+              child: GestureDetector(
+                  onTap: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => notification()),
+                    );
+                  },
+                  child: Image.asset("Assets/images/notification.png",height: 24,width: 24,)),
             ),]
       ),
 

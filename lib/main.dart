@@ -1,4 +1,7 @@
+import 'package:dokan_retailer/Screens/bottom_bar_screen/Cart/bill.dart';
 import 'package:dokan_retailer/Screens/bottom_bar_screen/bottom_nav_bar.dart';
+import 'package:dokan_retailer/Screens/no_found.dart';
+import 'package:dokan_retailer/Screens/rough.dart';
 import 'package:dokan_retailer/Screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -21,6 +24,7 @@ class MyApp extends StatelessWidget {
       ),
       home: //splash_screen()
       bottom_nav_bar()
+
     );
   }
 }
