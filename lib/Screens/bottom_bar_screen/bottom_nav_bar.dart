@@ -2,7 +2,7 @@
 import 'package:dokan_retailer/Screens/bottom_bar_screen/Cart/cart.dart';
 import 'package:dokan_retailer/Screens/bottom_bar_screen/homescreen/home.dart';
 import 'package:dokan_retailer/Screens/bottom_bar_screen/orders/order.dart';
-import 'package:dokan_retailer/Screens/bottom_bar_screen/profile.dart';
+import 'package:dokan_retailer/Screens/bottom_bar_screen/profile/profile.dart';
 import 'package:dokan_retailer/Screens/bottom_bar_screen/saved_item.dart';
 import 'package:flutter/material.dart';
 

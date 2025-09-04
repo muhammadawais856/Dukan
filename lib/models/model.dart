@@ -98,3 +98,10 @@ class OrderModel {
     required this.status,
   });
 }
+
+class MenuItemModel {
+  final String name;
+  final Widget? page; // nullable page
+
+  MenuItemModel({required this.name, this.page});
+}
