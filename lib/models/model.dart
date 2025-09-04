@@ -4,10 +4,19 @@ import 'package:flutter/cupertino.dart';
 class GridItem {
   final String name;
   final String image;
+  final String? price;
+  final String? oldPrice;
   final Widget? page;
 
-  GridItem({required this.name, required this.image, this.page});
+  GridItem({
+    required this.name,
+    required this.image,
+     this.price,     // ✅ added
+     this.oldPrice,  // ✅ added
+    this.page,
+  });
 }
+
 
 // wheat page list view
 

@@ -122,10 +122,10 @@ class _saved_itemState extends State<saved_item> {
 
 
                         blackbutton(text: "Buy Now", onPressed: (){
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => product_detail()),
-                          );
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(builder: (context) => product_detail()),
+                          // );
                         }),
                         SizedBox(height: 11,),
                       ],

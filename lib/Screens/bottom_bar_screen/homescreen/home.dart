@@ -17,15 +17,15 @@ class _homeState extends State<home> {
   TextEditingController search = TextEditingController();
 
   List<GridItem> gridItems = [
-    GridItem(name: "Rice", image: "Assets/images/rice.png"),
-    GridItem(name: "Wheat", image: "Assets/images/wheat.png",page: wheat()),
-    GridItem(name: "Oats", image: "Assets/images/oats.png"),
-    GridItem(name: "Barley", image: "Assets/images/barley.png"),
-    GridItem(name: "Corn", image: "Assets/images/corn.png"),
-    GridItem(name: "Wheat", image: "Assets/images/wheat.png"),
-    GridItem(name: "Oats", image: "Assets/images/oats.png"),
-    GridItem(name: "Barley", image: "Assets/images/barley.png"),
-    GridItem(name: "Corn", image: "Assets/images/corn.png"),
+    GridItem(name: "Rice", image: "Assets/images/rice.png",),
+    GridItem(name: "Wheat", image: "Assets/images/wheat.png",),
+    GridItem(name: "Oats", image: "Assets/images/oats.png",),
+    GridItem(name: "Barley", image: "Assets/images/barley.png",),
+    GridItem(name: "Corn", image: "Assets/images/corn.png",),
+    GridItem(name: "Wheat", image: "Assets/images/wheat.png",),
+    GridItem(name: "Oats", image: "Assets/images/oats.png",),
+    GridItem(name: "Barley", image: "Assets/images/barley.png",),
+    GridItem(name: "Corn", image: "Assets/images/corn.png",),
     GridItem(name: "Show All", image: "Assets/images/showall.png"),
   ];
 
@@ -117,13 +117,19 @@ class _homeState extends State<home> {
                           final item = gridItems[index];
                           return InkWell(
                             onTap: () {
-                              if (item.page != null) {
+                              if (index != gridItems.length - 1) { // avoid "Show All"
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => item.page!),
+                                  MaterialPageRoute(
+                                    builder: (context) => wheat(
+                                      name: item.name,
+                                      image: item.image,
+                                    ),
+                                  ),
                                 );
                               }
                             },
+
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [

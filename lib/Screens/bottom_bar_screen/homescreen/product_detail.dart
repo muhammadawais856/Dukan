@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 
 class product_detail extends StatefulWidget {
-  const product_detail({super.key});
+  final String name;
+  final String image;
+  final double price;
+  final double oldPrice;
+  const product_detail({
+    super.key,required this.name,
+    required this.image,
+    required this.price,
+    required this.oldPrice,});
 
   @override
   State<product_detail> createState() => _product_detailState();
@@ -21,27 +29,27 @@ class _product_detailState extends State<product_detail> {
             height: 198,
               width: double.infinity,
               color: Color(0xFFEEF0F6),
-              child: Image.asset("Assets/images/wheat3.png", height: 198, width: 375,)),
+              child: Image.asset(widget.image, height: 198, width: 375,)),
 
           Padding(
             padding: const EdgeInsets.only(top: 24, left: 20, right: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Wheat Grain Bag", style: TextStyle(color:Color(0xFF121212), fontSize: 20,
+                Text("${widget.name} Grain Bag", style: TextStyle(color:Color(0xFF121212), fontSize: 20,
                     fontWeight: FontWeight.w700, fontFamily: "inter", letterSpacing: -1),),
 
-                Text("Wheat", style: TextStyle(color:Color(0xFFADADAF), fontSize: 14,
+                Text(widget.name, style: TextStyle(color:Color(0xFFADADAF), fontSize: 14,
                     fontWeight: FontWeight.w500, fontFamily: "inter", letterSpacing: -1),),
 
                 SizedBox(height: 8,),
 
                 Row(
                   children: [
-                    Text("1200 Rs", style: TextStyle(color:Color(0xFFFF5934), fontSize: 16,
+                    Text("${widget.price.toStringAsFixed(0)} Rs", style: TextStyle(color:Color(0xFFFF5934), fontSize: 16,
                         fontWeight: FontWeight.w600, fontFamily: "Inter", letterSpacing: -1),),
                     SizedBox(width: 3,),
-                    Text("1600 Rs", style: TextStyle(color:Color(0xFF000000), fontSize: 12,
+                    Text("${widget.oldPrice.toStringAsFixed(0)} Rs", style: TextStyle(color:Color(0xFF000000), fontSize: 12,
                         fontWeight: FontWeight.w500, fontFamily: "Inter", letterSpacing: -1,
                         decoration: TextDecoration.lineThrough,decorationColor: Color(0xFF000000)),),
                   ],
