@@ -2,10 +2,19 @@ import 'package:dokan_retailer/Screens/bottom_bar_screen/Cart/bill.dart';
 import 'package:dokan_retailer/Screens/bottom_bar_screen/bottom_nav_bar.dart';
 import 'package:dokan_retailer/Screens/no_found.dart';
 import 'package:dokan_retailer/Screens/splash_screen.dart';
+import 'package:dokan_retailer/providers/cart_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart'; // <-- Added
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => CartProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -14,18 +23,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: //splash_screen()
-      bottom_nav_bar()
-
+      home: bottom_nav_bar(),
     );
   }
 }
-
-

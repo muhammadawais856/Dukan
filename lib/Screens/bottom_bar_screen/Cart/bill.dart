@@ -345,11 +345,11 @@ class _billState extends State<bill> {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const confirm_order()),
-                        );
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //       builder: (context) => const confirm_order()),
+                        // );
                       },
                       child: const Text(
                         "Share",

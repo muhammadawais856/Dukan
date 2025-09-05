@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../../models/model.dart';
+import '../../../providers/cart_provider.dart';
 
 class product_detail extends StatefulWidget {
   final String name;
@@ -165,19 +169,38 @@ class _product_detailState extends State<product_detail> {
                   height: 48,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF121212), // black background
-                      //foregroundColor: Colors.white,
+                      backgroundColor: Color(0xFF121212),
                       padding: EdgeInsets.zero,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                     onPressed: () {
+                      Provider.of<CartProvider>(context, listen: false).addItem(
+                        cartitem(
+                          name: widget.name,
+                          price: widget.price,
+                          oldPrice: widget.oldPrice,
+                          qty: quantity,
+                          img: widget.image,
+                        ),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Item added to cart")),
+                      );
                     },
-                    child: Text("Add to Cart", style: TextStyle(color:Color(0xFFFFFFFF), fontSize: 15,
-                        fontWeight: FontWeight.w500, fontFamily: "Inter", letterSpacing: -1),),
+                    child: Text(
+                      "Add to Cart",
+                      style: TextStyle(
+                          color: Color(0xFFFFFFFF),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: "Inter",
+                          letterSpacing: -1),
+                    ),
                   ),
                 ),
+
 
               ],
             ),

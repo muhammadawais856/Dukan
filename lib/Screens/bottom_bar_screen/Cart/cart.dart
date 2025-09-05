@@ -1,7 +1,10 @@
 import 'package:dokan_retailer/Screens/bottom_bar_screen/Cart/checkout.dart';
+import 'package:dokan_retailer/Screens/no_found.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:dokan_retailer/models/model.dart';
+import 'package:provider/provider.dart'; // 🔹 CHANGED: Import Provider
+
+import '../../../models/model.dart';
+import '../../../providers/cart_provider.dart'; // 🔹 CHANGED: Import CartProvider
 
 class cart extends StatefulWidget {
   const cart({super.key});
@@ -11,17 +14,13 @@ class cart extends StatefulWidget {
 }
 
 class _cartState extends State<cart> {
-  List<cartitem> cartItems = [
-    cartitem(name: "Wheat Grain Bag", price: 1200, oldPrice: 1600, qty: 3, img: "Assets/images/wheat.png"),
-    cartitem(name: "Wheat Grain Bag", price: 1200, oldPrice: 1600, qty: 1, img: "Assets/images/wheat.png"),
-    cartitem(name: "Wheat Grain Bag", price: 1200, oldPrice: 1600, qty: 1, img: "Assets/images/wheat.png"),
-    cartitem(name: "Wheat Grain Bag", price: 1200, oldPrice: 1600, qty: 2, img: "Assets/images/wheat.png"),
-    cartitem(name: "Wheat Grain Bag", price: 1200, oldPrice: 1600, qty: 2, img: "Assets/images/wheat.png"),
-  ];
-
   @override
   Widget build(BuildContext context) {
-    final int total = cartItems.fold(0, (sum, item) => sum + item.price * item.qty);
+    // 🔹 CHANGED: Use Provider instead of hardcoded list
+    final cartItems = context.watch<CartProvider>().items;
+
+    // 🔹 CHANGED: Total price using Provider
+    final double total = context.watch<CartProvider>().total;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -40,71 +39,28 @@ class _cartState extends State<cart> {
           ),
           const SizedBox(height: 20),
           const Divider(color: Color(0xffEEF0F6)),
+
+          /// 🛒 Cart Items List
           Expanded(
-            child: ListView.builder(
+            child: cartItems.isEmpty
+                ? const no_found()
+                : ListView.builder(
               itemCount: cartItems.length,
               itemBuilder: (context, index) {
                 final item = cartItems[index];
 
-                return Slidable(
-                  key: ValueKey('cart_$index'),
-                  // Swipe from right to left
-                  endActionPane: ActionPane(
-                    extentRatio: 0.26,
-                    motion: const StretchMotion(),
-                    children: [
-                      CustomSlidableAction(
-                        autoClose: true,
-                        padding: EdgeInsets.zero,
-                        onPressed: (_) {
-                          setState(() => cartItems.removeAt(index));
-                        },
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(12),
-                              bottomRight: Radius.circular(12),
-
-                            ),
-                            gradient: LinearGradient(
-                              begin: Alignment.centerRight,
-                              end: Alignment.centerLeft,
-                              colors: [
-                                Color(0xFFFF0000),
-                                Color(0xFFFF0000),// Red
-                                Color(0x00FF5934),
-                                // Transparent orange
-                              ],
-                            ),
-                          ),
-                          alignment: Alignment.center,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset("Assets/images/delete.png", height: 24, width: 24),
-                              const SizedBox(width: 8),
-                              const Text(
-                                "Delete",
-                                style: TextStyle(
-                                  color: Color(0xffFFFFFF),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: "Inter",
-                                  letterSpacing: -1,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                return CartSwipeItem(
+                  key: ValueKey(item.hashCode),
+                  maxSwipe: 100,
+                  onDelete: () {
+                    // 🔹 Remove item using Provider or local list
+                    setState(() => cartItems.removeAt(index));
+                  },
                   child: Container(
                     margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: const Color(0xffEEF0F6),
                       borderRadius: BorderRadius.circular(12),
-
                     ),
                     child: ListTile(
                       leading: Image.asset(item.img, height: 40, width: 40),
@@ -134,7 +90,7 @@ class _cartState extends State<cart> {
                           Row(
                             children: [
                               Text(
-                                "${item.price} Rs",
+                                "${item.price.toStringAsFixed(0)} Rs",
                                 style: const TextStyle(
                                   color: Color(0xFFFF5934),
                                   fontSize: 16,
@@ -145,7 +101,7 @@ class _cartState extends State<cart> {
                               ),
                               const SizedBox(width: 6),
                               Text(
-                                "${item.oldPrice} Rs",
+                                "${item.oldPrice.toStringAsFixed(0)} Rs",
                                 style: TextStyle(
                                   color: const Color(0xFF000000).withOpacity(0.66),
                                   fontSize: 12,
@@ -168,6 +124,7 @@ class _cartState extends State<cart> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
+                            // Minus Button
                             SizedBox(
                               width: 28,
                               height: 28,
@@ -180,9 +137,13 @@ class _cartState extends State<cart> {
                                   ),
                                 ),
                                 onPressed: () {
-                                  setState(() {
-                                    if (item.qty > 1) item.qty--;
-                                  });
+                                  if (item.qty > 1)
+                                    {
+                                      setState(() {
+                                        item.qty--;
+                                      });
+                                    }
+
                                 },
                                 child: Image.asset("Assets/images/minus.png", height: 2, width: 14),
                               ),
@@ -199,6 +160,7 @@ class _cartState extends State<cart> {
                               ),
                             ),
                             const SizedBox(width: 6),
+                            // Plus Button
                             SizedBox(
                               width: 28,
                               height: 28,
@@ -215,6 +177,7 @@ class _cartState extends State<cart> {
                                   setState(() {
                                     item.qty++;
                                   });
+
                                 },
                                 child: Image.asset(
                                   "Assets/images/plus.png",
@@ -234,7 +197,8 @@ class _cartState extends State<cart> {
             ),
           ),
 
-          // Bottom Checkout
+
+          /// 🛒 Bottom Checkout
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 19),
             decoration: const BoxDecoration(
@@ -260,7 +224,7 @@ class _cartState extends State<cart> {
                       ),
                     ),
                     Text(
-                      "$total Rs",
+                      "${total.toStringAsFixed(0)} Rs", // 🔹 CHANGED: Total from Provider
                       style: const TextStyle(
                         color: Color(0xFFFF5934),
                         fontSize: 16,
@@ -285,7 +249,7 @@ class _cartState extends State<cart> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => checkout()),
+                        MaterialPageRoute(builder: (context) => checkout(cartItems: cartItems)),
                       );
                     },
                     child: const Text(
@@ -302,6 +266,140 @@ class _cartState extends State<cart> {
                 ),
               ],
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 🔹 Custom swipe widget that keeps your design and animates full-swipe on delete
+class CartSwipeItem extends StatefulWidget {
+  final Widget child;
+  final VoidCallback onDelete;
+  final double maxSwipe; // how far the partial swipe stops (px)
+
+  const CartSwipeItem({
+    super.key,
+    required this.child,
+    required this.onDelete,
+    this.maxSwipe = 100.0,
+  });
+
+  @override
+  State<CartSwipeItem> createState() => _CartSwipeItemState();
+}
+
+class _CartSwipeItemState extends State<CartSwipeItem> with SingleTickerProviderStateMixin {
+  double _dx = 0.0;
+  late final AnimationController _controller;
+  late Animation<double> _anim;
+  bool _isAnimating = false;
+  bool _isDeleting = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 220));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _animateTo(double target, {bool deleting = false}) {
+    _controller.stop();
+    _anim = Tween<double>(begin: _dx, end: target).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut))
+      ..addListener(() {
+        setState(() {
+          _dx = _anim.value;
+        });
+      })
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          _isAnimating = false;
+          if (deleting) {
+            widget.onDelete();
+          }
+        }
+      });
+
+    _isAnimating = true;
+    _isDeleting = deleting;
+    _controller.reset();
+    _controller.forward();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final double fullWidth = MediaQuery.of(context).size.width + 50;
+
+    return GestureDetector(
+      onHorizontalDragUpdate: (details) {
+        if (_isAnimating || _isDeleting) return;
+        setState(() {
+          _dx += details.delta.dx;
+          if (_dx < -widget.maxSwipe) _dx = -widget.maxSwipe;
+          if (_dx > 0) _dx = 0;
+        });
+      },
+      onHorizontalDragEnd: (details) {
+        if (_isAnimating || _isDeleting) return;
+        if (_dx.abs() < widget.maxSwipe / 2) {
+          _animateTo(0.0);
+        } else {
+          _animateTo(-widget.maxSwipe);
+        }
+      },
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                gradient: const LinearGradient(
+                  begin: Alignment.centerRight,
+                  end: Alignment.centerLeft,
+                  colors: [
+                    Color(0xFFFF0000),
+                    Color(0x00FF5934),
+                    Color(0x00FF5934),
+                  ],
+                ),
+              ),
+              alignment: Alignment.centerRight,
+              padding: const EdgeInsets.only(right: 20),
+              child: GestureDetector(
+                onTap: () {
+                  if (_isAnimating) return;
+                  _animateTo(-fullWidth, deleting: true);
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset("Assets/images/delete.png", height: 24, width: 24),
+                    const SizedBox(width: 8),
+                    const Text(
+                      "Delete",
+                      style: TextStyle(
+                        color: Color(0xffFFFFFF),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: "Inter",
+                        letterSpacing: -1,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Transform.translate(
+            offset: Offset(_dx, 0),
+            child: widget.child,
           ),
         ],
       ),

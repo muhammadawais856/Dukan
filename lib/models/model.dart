@@ -48,8 +48,8 @@ class Product {
 
 class cartitem {
   String name;
-  int price;
-  int oldPrice;
+  double price;
+  double oldPrice;
   int qty;
   String img;
 
@@ -114,3 +114,29 @@ class MenuItemModel {
 
   MenuItemModel({required this.name, this.page});
 }
+
+class BillItem {
+  final String name;
+  final double price;
+  final int quantity;
+
+  BillItem({
+    required this.name,
+    required this.price,
+    required this.quantity,
+  });
+}
+
+
+class CartItem {
+  final String name;
+  final int qty;
+  final double price;
+
+  CartItem({
+    required this.name,
+    required this.qty,
+    required this.price,
+  });
+}
+
