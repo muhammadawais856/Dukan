@@ -4,7 +4,7 @@ import 'package:dokan_retailer/Screens/no_found.dart';
 import 'package:dokan_retailer/Screens/splash_screen.dart';
 import 'package:dokan_retailer/providers/cart_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart'; // <-- Added
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: bottom_nav_bar(),
+      home: splash_screen()
     );
   }
 }

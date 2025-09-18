@@ -11,8 +11,8 @@ class GridItem {
   GridItem({
     required this.name,
     required this.image,
-     this.price,     // ✅ added
-     this.oldPrice,  // ✅ added
+     this.price,
+     this.oldPrice,
     this.page,
   });
 }
