@@ -3,6 +3,8 @@ import 'package:dokan_retailer/Screens/bottom_bar_screen/bottom_nav_bar.dart';
 import 'package:dokan_retailer/Screens/no_found.dart';
 import 'package:dokan_retailer/Screens/splash_screen.dart';
 import 'package:dokan_retailer/providers/cart_provider.dart';
+import 'package:dokan_retailer/providers/category_provider.dart';
+import 'package:dokan_retailer/providers/token_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,6 +13,8 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => TokenProvider()),
+        ChangeNotifierProvider(create: (_) => CategoryProvider()),
       ],
       child: const MyApp(),
     ),

@@ -1,17 +1,17 @@
 // To parse this JSON data, do
 //
-//     final bannerlist = bannerlistFromJson(jsonString);
+//     final bannerlistModel = bannerlistModelFromJson(jsonString);
 
 import 'dart:convert';
 
-Bannerlist bannerlistFromJson(String str) => Bannerlist.fromJson(json.decode(str));
+Bannerlist bannerlistModelFromJson(String str) => Bannerlist.fromJson(json.decode(str));
 
-String bannerlistToJson(Bannerlist data) => json.encode(data.toJson());
+String bannerlistModelToJson(Bannerlist data) => json.encode(data.toJson());
 
 class Bannerlist {
   final bool? success;
   final int? count;
-  final Banners? banners;
+  final List<Banner>? banners;
 
   Bannerlist({
     this.success,
@@ -22,37 +22,40 @@ class Bannerlist {
   factory Bannerlist.fromJson(Map<String, dynamic> json) => Bannerlist(
     success: json["success"],
     count: json["count"],
-    banners: json["banners"] == null ? null : Banners.fromJson(json["banners"]),
+    banners: json["banners"] == null ? [] : List<Banner>.from(json["banners"]!.map((x) => Banner.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "success": success,
     "count": count,
-    "banners": banners?.toJson(),
+    "banners": banners == null ? [] : List<dynamic>.from(banners!.map((x) => x.toJson())),
   };
 }
 
-class Banners {
+class Banner {
   final String? id;
   final String? image;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final int? v;
+  final String? user;
 
-  Banners({
+  Banner({
     this.id,
     this.image,
     this.createdAt,
     this.updatedAt,
     this.v,
+    this.user,
   });
 
-  factory Banners.fromJson(Map<String, dynamic> json) => Banners(
+  factory Banner.fromJson(Map<String, dynamic> json) => Banner(
     id: json["_id"],
     image: json["image"],
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
     updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
     v: json["__v"],
+    user: json["user"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -61,5 +64,6 @@ class Banners {
     "createdAt": createdAt?.toIso8601String(),
     "updatedAt": updatedAt?.toIso8601String(),
     "__v": v,
+    "user": user,
   };
 }

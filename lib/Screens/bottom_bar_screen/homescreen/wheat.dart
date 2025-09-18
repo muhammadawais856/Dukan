@@ -47,7 +47,21 @@ class _wheatState extends State<wheat> {
             padding: const EdgeInsets.only(left: 24, right: 24, top: 24),
             child: Row(
               children: [
-                Image.asset(widget.image, height: 43,width: 46,), SizedBox(width: 6,),
+                CircleAvatar(
+                  radius: 30,
+                  backgroundColor: Colors.grey[200],
+                  child: ClipOval(
+                    child: Image.network(
+                      widget.image,
+                      height: 60,
+                      width: 60,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+
+
+                SizedBox(width: 6,),
                 Text(widget.name, style: TextStyle(fontSize: 24, fontFamily: 'Inter',
                     fontWeight: FontWeight.w700, color: Color(0xFF121212),letterSpacing: -1),),
               ],
@@ -122,7 +136,7 @@ class _wheatState extends State<wheat> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Image.asset(widget.image, height: 129, width: 144.5,
+                            Image.network(widget.image, height: 129, width: 144.5,
                             ),
                             const SizedBox(height: 3),
                             SizedBox(

@@ -33,7 +33,9 @@ class _product_detailState extends State<product_detail> {
             height: 198,
               width: double.infinity,
               color: Color(0xFFEEF0F6),
-              child: Image.asset(widget.image, height: 198, width: 375,)),
+              child:Image.network(widget.image, height: 198, width: 375)
+              //Image.asset(widget.image, height: 198, width: 375,)
+          ),
 
           Padding(
             padding: const EdgeInsets.only(top: 24, left: 20, right: 20),
