@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:dokan_retailer/models/product.dart';
+import 'package:dokan_retailer/models/product/product_list.dart';
 import 'package:http/http.dart' as http;
 
 

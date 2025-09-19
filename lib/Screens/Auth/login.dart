@@ -4,10 +4,12 @@ import 'package:dokan_retailer/Widgets/customText.dart';
 import 'package:dokan_retailer/Widgets/custombutton.dart';
 import 'package:dokan_retailer/Widgets/textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 
 import '../../Services/Auth.dart';
-import '../../models/login.dart'; // ✅ Login model
+import '../../models/login.dart';
+import '../../providers/token_provider.dart'; // ✅ Login model
 
 class login extends StatefulWidget {
   const login({super.key});
@@ -42,6 +44,7 @@ class _loginState extends State<login> {
       );
 
       if (response.success == true && response.token != null) {
+        Provider.of<TokenProvider>(context, listen: false).setToken(response.token!);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(response.message ?? "Login successful")),
         );

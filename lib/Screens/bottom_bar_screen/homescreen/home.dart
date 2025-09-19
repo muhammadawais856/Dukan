@@ -5,7 +5,7 @@ import 'package:dokan_retailer/Screens/notification.dart';
 import 'package:dokan_retailer/Services/banner.dart';
 import 'package:dokan_retailer/Services/product.dart';
 import 'package:dokan_retailer/models/banner/bannerlist.dart';
-import 'package:dokan_retailer/models/product.dart';
+import 'package:dokan_retailer/models/product/product_list.dart';
 import 'package:dokan_retailer/providers/category_provider.dart';
 import 'package:dokan_retailer/providers/token_provider.dart';
 import 'package:flutter/material.dart';

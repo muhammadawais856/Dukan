@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:dokan_retailer/models/product.dart'; // ✅ Correct Product model
+import 'package:dokan_retailer/models/product/product_list.dart'; // ✅ Correct Product model
 
 class ProductDetailsPage extends StatelessWidget {
   final Product product;
