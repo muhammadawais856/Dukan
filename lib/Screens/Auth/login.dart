@@ -106,7 +106,7 @@ class _loginState extends State<login> {
               customTextField(
                 hintText: "Password",
                 controller: password,
-                keyboardType: TextInputType.text,
+                keyboardType: TextInputType.number,
               ),
               SizedBox(height: 279),
 

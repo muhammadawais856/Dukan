@@ -232,11 +232,7 @@ class _homeState extends State<home> {
                                 image: category.image,),
                             ),
                           );
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("${category.name} clicked"),
-                            ),
-                          );
+
                         },
                         child: Column(
                           mainAxisSize: MainAxisSize.min,

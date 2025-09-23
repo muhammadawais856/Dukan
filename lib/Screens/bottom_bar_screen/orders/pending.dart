@@ -1,5 +1,5 @@
 import 'package:dokan_retailer/Services/order.dart';
-import 'package:dokan_retailer/models/order/orderlist.dart';
+import 'package:dokan_retailer/models/order_status/order_status_list.dart'; // ✅ use unified Order model
 import 'package:dokan_retailer/providers/token_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:dokan_retailer/Screens/bottom_bar_screen/orders/order_detail.dart';
@@ -13,27 +13,26 @@ class pending extends StatefulWidget {
 }
 
 class _pendingState extends State<pending> {
-  late Future<Orderlist> _futureOrders;
+  late Future<List<Order>> _futureOrders;
 
   @override
   void initState() {
     super.initState();
-    // Don’t load API here directly, wait until we get token from provider in build()
+    // initialize later with token
   }
 
   @override
   Widget build(BuildContext context) {
     final tokenProvider = Provider.of<TokenProvider>(context);
-    final token = tokenProvider.getToken(); // ✅ get token from login
+    final token = tokenProvider.getToken();
 
-    if (token == null || token.isEmpty) {
+    if (token.isEmpty) {
       return const Center(child: Text("No token found. Please login again."));
     }
 
-    // Call API when token is available
     _futureOrders = OrderService().getPendingOrders(token);
 
-    return FutureBuilder<Orderlist>(
+    return FutureBuilder<List<Order>>(
       future: _futureOrders,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -44,11 +43,11 @@ class _pendingState extends State<pending> {
           return Center(child: Text("Error: ${snapshot.error}"));
         }
 
-        if (!snapshot.hasData || snapshot.data!.orders!.isEmpty) {
+        if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return const Center(child: Text("No pending orders"));
         }
 
-        final orders = snapshot.data!.orders!;
+        final orders = snapshot.data!;
 
         return ListView.builder(
           padding: const EdgeInsets.all(20),
@@ -60,7 +59,7 @@ class _pendingState extends State<pending> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => OrderDetail(order: order), // ✅ pass correct order
+                    builder: (context) => OrderDetail(order: order),
                   ),
                 );
               },
@@ -184,13 +183,13 @@ class _pendingState extends State<pending> {
                           vertical: 6,
                         ),
                         decoration: BoxDecoration(
-                          color: const Color(0x17000000),
+                          color: const Color(0x17000000), // light grey bg
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(
                           order.status ?? "Pending",
                           style: const TextStyle(
-                            color: Color(0xff121212),
+                            color: Color(0xff121212), // dark grey text
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
                             fontFamily: "Inter",

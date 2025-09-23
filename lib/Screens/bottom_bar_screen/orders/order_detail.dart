@@ -1,8 +1,9 @@
+import 'package:dokan_retailer/models/order_status/order_status_list.dart';
 import 'package:flutter/material.dart';
-import 'package:dokan_retailer/models/order/orderlist.dart'; // <-- use Orderlist model
+
 
 class OrderDetail extends StatelessWidget {
-  final Order order; // ✅ Correct: your inner class is `Order`
+  final Order order;
 
   const OrderDetail({Key? key, required this.order}) : super(key: key);
 
@@ -55,9 +56,9 @@ class OrderDetail extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Padding(
-                        padding: EdgeInsets.all(10.0),
+                        padding: EdgeInsets.all(12.0),
                         child: Text(
-                          "Order Details",
+                          "Order Information",
                           style: TextStyle(
                             color: Color(0xFF121212),
                             fontSize: 18,
@@ -67,46 +68,57 @@ class OrderDetail extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const Divider(color: Color(0xffEEF0F6)),
+                      const Divider(color: Color(0xffEEF0F6), height: 1),
 
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(12.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _detailRow("Order ID", order.orderNumber ?? order.id ?? ""),
-                            _detailRow("Number of items", order.orderItems?.length.toString() ?? "0"),
-                            _detailRow("Delivery Address", order.shippingAddress?.address ?? "No address"),
+                            _detailRow(
+                                "Order ID", order.orderNumber ?? order.id ?? ""),
+                            _detailRow("Number of items",
+                                (order.orderItems?.length ?? 0).toString()),
+                            _detailRow("Delivery Address",
+                                order.shippingAddress?.address ?? "No address"),
                             _detailRow(
                               "Expected Delivery",
                               order.deliveryDate != null
-                                  ? order.deliveryDate!.toLocal().toString().split(" ")[0]
+                                  ? order.deliveryDate!
+                                  .toLocal()
+                                  .toString()
+                                  .split(" ")[0]
                                   : "Not set",
                             ),
+                            _detailRow("Status", order.status ?? "Unknown"),
                           ],
                         ),
                       ),
 
-                      const Divider(color: Color(0xffEEF0F6)),
+                      const Divider(color: Color(0xffEEF0F6), height: 1),
 
                       Padding(
-                        padding: const EdgeInsets.all(10.0),
+                        padding: const EdgeInsets.all(12.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Text(
-                              "Total",
+                              "Total Amount",
                               style: TextStyle(
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w600,
                                 fontSize: 16,
+                                fontFamily: "Inter",
+                                letterSpacing: -1,
                               ),
                             ),
                             Text(
                               "${order.totalAmount ?? 0} Rs",
                               style: const TextStyle(
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w600,
                                 fontSize: 16,
-                                color: Colors.red,
+                                color: Color(0xffFF5934),
+                                fontFamily: "Inter",
+                                letterSpacing: -1,
                               ),
                             ),
                           ],
@@ -173,7 +185,7 @@ class OrderDetail extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      // TODO: Implement cancel order
+                      // TODO: Implement cancel order API
                     },
                     child: const Text(
                       "Cancel Order",
@@ -204,9 +216,11 @@ class OrderDetail extends StatelessWidget {
           Text(
             label,
             style: const TextStyle(
-              color: Colors.grey,
+              color: Color(0x66000000),
               fontSize: 12,
               fontWeight: FontWeight.w500,
+              fontFamily: "Inter",
+              letterSpacing: -1,
             ),
           ),
           Text(
@@ -214,6 +228,8 @@ class OrderDetail extends StatelessWidget {
             style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
+              fontFamily: "Inter",
+              letterSpacing: -1,
             ),
           ),
         ],

@@ -1,38 +1,38 @@
 // To parse this JSON data, do
 //
-//     final order = orderFromJson(jsonString);
+//     final orderstatuslist = orderstatuslistFromJson(jsonString);
 
 import 'dart:convert';
 
-Order orderFromJson(String str) => Order.fromJson(json.decode(str));
+Orderstatuslist orderstatuslistFromJson(String str) => Orderstatuslist.fromJson(json.decode(str));
 
-String orderToJson(Order data) => json.encode(data.toJson());
+String orderstatuslistToJson(Orderstatuslist data) => json.encode(data.toJson());
 
-class Order {
+class Orderstatuslist {
   final bool? success;
   final int? count;
-  final Orders? orders;
+  final List<Order>? orders;
 
-  Order({
+  Orderstatuslist({
     this.success,
     this.count,
     this.orders,
   });
 
-  factory Order.fromJson(Map<String, dynamic> json) => Order(
+  factory Orderstatuslist.fromJson(Map<String, dynamic> json) => Orderstatuslist(
     success: json["success"],
     count: json["count"],
-    orders: json["orders"] == null ? null : Orders.fromJson(json["orders"]),
+    orders: json["orders"] == null ? [] : List<Order>.from(json["orders"]!.map((x) => Order.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "success": success,
     "count": count,
-    "orders": orders?.toJson(),
+    "orders": orders == null ? [] : List<dynamic>.from(orders!.map((x) => x.toJson())),
   };
 }
 
-class Orders {
+class Order {
   final ShippingAddress? shippingAddress;
   final String? id;
   final String? user;
@@ -50,7 +50,7 @@ class Orders {
   final DateTime? updatedAt;
   final int? v;
 
-  Orders({
+  Order({
     this.shippingAddress,
     this.id,
     this.user,
@@ -69,7 +69,7 @@ class Orders {
     this.v,
   });
 
-  factory Orders.fromJson(Map<String, dynamic> json) => Orders(
+  factory Order.fromJson(Map<String, dynamic> json) => Order(
     shippingAddress: json["shippingAddress"] == null ? null : ShippingAddress.fromJson(json["shippingAddress"]),
     id: json["_id"],
     user: json["user"],
@@ -109,8 +109,8 @@ class Orders {
 }
 
 class OrderItem {
-  final String? product;
-  final String? name;
+  final Product? product;
+  final Name? name;
   final int? quantity;
   final int? price;
   final int? totalPrice;
@@ -124,21 +124,37 @@ class OrderItem {
   });
 
   factory OrderItem.fromJson(Map<String, dynamic> json) => OrderItem(
-    product: json["product"],
-    name: json["name"],
+    product: productValues.map[json["product"]]!,
+    name: nameValues.map[json["name"]]!,
     quantity: json["quantity"],
     price: json["price"],
     totalPrice: json["totalPrice"],
   );
 
   Map<String, dynamic> toJson() => {
-    "product": product,
-    "name": name,
+    "product": productValues.reverse[product],
+    "name": nameValues.reverse[name],
     "quantity": quantity,
     "price": price,
     "totalPrice": totalPrice,
   };
 }
+
+enum Name {
+  OLIVE
+}
+
+final nameValues = EnumValues({
+  "Olive": Name.OLIVE
+});
+
+enum Product {
+  THE_68_CA6748_A97_C83_C87_C6_C1_D37
+}
+
+final productValues = EnumValues({
+  "68ca6748a97c83c87c6c1d37": Product.THE_68_CA6748_A97_C83_C87_C6_C1_D37
+});
 
 class ShippingAddress {
   final String? address;
@@ -166,4 +182,16 @@ class ShippingAddress {
     "postalCode": postalCode,
     "country": country,
   };
+}
+
+class EnumValues<T> {
+  Map<String, T> map;
+  late Map<T, String> reverseMap;
+
+  EnumValues(this.map);
+
+  Map<T, String> get reverse {
+    reverseMap = map.map((k, v) => MapEntry(v, k));
+    return reverseMap;
+  }
 }

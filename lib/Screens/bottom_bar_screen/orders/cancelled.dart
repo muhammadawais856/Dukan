@@ -1,5 +1,6 @@
+
 import 'package:dokan_retailer/Services/order.dart';
-import 'package:dokan_retailer/models/order/orderlist.dart';
+import 'package:dokan_retailer/models/order_status/order_status_list.dart';
 import 'package:dokan_retailer/providers/token_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:dokan_retailer/Screens/bottom_bar_screen/orders/order_detail.dart';
@@ -13,12 +14,12 @@ class cancelled extends StatefulWidget {
 }
 
 class _cancelledState extends State<cancelled> {
-  late Future<Orderlist> _futureOrders;
+  late Future<List<Order>> _futureOrders;
 
   @override
   void initState() {
     super.initState();
-    // don’t call API here, wait for token
+    // will initialize in build after getting token
   }
 
   @override
@@ -32,7 +33,7 @@ class _cancelledState extends State<cancelled> {
 
     _futureOrders = OrderService().getCancelledOrders(token);
 
-    return FutureBuilder<Orderlist>(
+    return FutureBuilder<List<Order>>(
       future: _futureOrders,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -43,11 +44,11 @@ class _cancelledState extends State<cancelled> {
           return Center(child: Text("Error: ${snapshot.error}"));
         }
 
-        if (!snapshot.hasData || snapshot.data!.orders!.isEmpty) {
+        if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return const Center(child: Text("No cancelled orders"));
         }
 
-        final orders = snapshot.data!.orders!;
+        final orders = snapshot.data!;
 
         return ListView.builder(
           padding: const EdgeInsets.all(20),

@@ -1,5 +1,5 @@
 import 'package:dokan_retailer/Services/order.dart';
-import 'package:dokan_retailer/models/order/orderlist.dart';
+import 'package:dokan_retailer/models/order_status/order_status_list.dart';
 import 'package:dokan_retailer/providers/token_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:dokan_retailer/Screens/bottom_bar_screen/orders/order_detail.dart';
@@ -13,12 +13,12 @@ class completed extends StatefulWidget {
 }
 
 class _completedState extends State<completed> {
-  late Future<Orderlist> _futureOrders;
+  late Future<List<Order>> _futureOrders;
 
   @override
   void initState() {
     super.initState();
-    // don’t load API here; wait for token in build()
+    // initialize later after getting token
   }
 
   @override
@@ -32,7 +32,7 @@ class _completedState extends State<completed> {
 
     _futureOrders = OrderService().getCompletedOrders(token);
 
-    return FutureBuilder<Orderlist>(
+    return FutureBuilder<List<Order>>(
       future: _futureOrders,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -43,11 +43,11 @@ class _completedState extends State<completed> {
           return Center(child: Text("Error: ${snapshot.error}"));
         }
 
-        if (!snapshot.hasData || snapshot.data!.orders!.isEmpty) {
+        if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return const Center(child: Text("No completed orders"));
         }
 
-        final orders = snapshot.data!.orders!;
+        final orders = snapshot.data!;
 
         return ListView.builder(
           padding: const EdgeInsets.all(20),
@@ -183,13 +183,13 @@ class _completedState extends State<completed> {
                           vertical: 6,
                         ),
                         decoration: BoxDecoration(
-                          color: const Color(0x2117B556),
+                          color: const Color(0x2117B556), // light green bg
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(
                           order.status ?? "Completed",
                           style: const TextStyle(
-                            color: Color(0xff17B556),
+                            color: Color(0xff17B556), // green text
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
                             fontFamily: "Inter",

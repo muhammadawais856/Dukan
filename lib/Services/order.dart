@@ -1,76 +1,51 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../models/order/orderlist.dart';
+import '../models/order_status/order_status_list.dart';
 
 class OrderService {
   final String baseUrl = "https://karyana-apis-backend.vercel.app";
 
-  // 🔹 Common headers with Bearer token
+  // 🔹 Common headers
   Map<String, String> _headers(String token) => {
     "Content-Type": "application/json",
     "Authorization": "Bearer $token",
   };
 
-  /// Get Pending Orders
-  Future<Orderlist> getPendingOrders(String token) async {
+  /// 🔹 Reusable function to fetch orders and filter by status
+  Future<List<Order>> _getOrdersByStatus(String token, String status) async {
     try {
       final response = await http.get(
-        Uri.parse('$baseUrl/api/orders/'),
+        Uri.parse("$baseUrl/api/orders"),
         headers: _headers(token),
       );
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        final data = json.decode(response.body);
-        return Orderlist.fromJson(data);
+      if (response.statusCode == 200) {
+        final data = orderstatuslistFromJson(response.body);
+
+        // Filter by order status
+        return data.orders!
+            .where((order) =>
+        order.status?.toLowerCase() == status.toLowerCase())
+            .toList();
       } else {
         throw Exception(
-          "Failed to load pending orders: ${response.statusCode} → ${response.body}",
+          "Failed to load orders → ${response.statusCode}: ${response.body}",
         );
       }
     } catch (e) {
-      throw Exception("Error fetching pending orders: $e");
+      throw Exception("Error fetching $status orders: $e");
     }
   }
 
-  /// Get Completed Orders
-  Future<Orderlist> getCompletedOrders(String token) async {
-    try {
-      final response = await http.get(
-        Uri.parse('$baseUrl/api/orders/completed'),
-        headers: _headers(token),
-      );
+  /// 🔹 Pending Orders
+  Future<List<Order>> getPendingOrders(String token) =>
+      _getOrdersByStatus(token, "pending");
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        final data = json.decode(response.body);
-        return Orderlist.fromJson(data);
-      } else {
-        throw Exception(
-          "Failed to load completed orders: ${response.statusCode} → ${response.body}",
-        );
-      }
-    } catch (e) {
-      throw Exception("Error fetching completed orders: $e");
-    }
-  }
+  /// 🔹 Completed Orders
+  Future<List<Order>> getCompletedOrders(String token) =>
+      _getOrdersByStatus(token, "completed");
 
-  /// Get Cancelled Orders
-  Future<Orderlist> getCancelledOrders(String token) async {
-    try {
-      final response = await http.get(
-        Uri.parse('$baseUrl/api/orders/cancelled'),
-        headers: _headers(token),
-      );
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        final data = json.decode(response.body);
-        return Orderlist.fromJson(data);
-      } else {
-        throw Exception(
-          "Failed to load cancelled orders: ${response.statusCode} → ${response.body}",
-        );
-      }
-    } catch (e) {
-      throw Exception("Error fetching cancelled orders: $e");
-    }
-  }
+  /// 🔹 Cancelled Orders
+  Future<List<Order>> getCancelledOrders(String token) =>
+      _getOrdersByStatus(token, "cancelled");
 }
