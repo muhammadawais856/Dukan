@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:dokan_retailer/Screens/bottom_bar_screen/homescreen/product_detail1.dart';
+import 'package:dokan_retailer/Screens/bottom_bar_screen/homescreen/search.dart';
 import 'package:dokan_retailer/Screens/bottom_bar_screen/homescreen/wheat.dart';
 import 'package:dokan_retailer/Screens/notification.dart';
 import 'package:dokan_retailer/Services/banner.dart';
@@ -161,38 +162,46 @@ class _homeState extends State<home> {
             // Search Bar
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
-                controller: search,
-                keyboardType: TextInputType.name,
-                decoration: InputDecoration(
-                  prefixIcon: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Image.asset(
-                      "Assets/images/search.png",
-                      height: 24,
-                      width: 24,
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => search_screen(),
                     ),
-                  ),
-                  hintText: "Search",
-                  hintStyle: const TextStyle(
-                    color: Color(0xFFADADAF),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: "inter",
-                    letterSpacing: -1,
-                  ),
-                  filled: true,
-                  fillColor: const Color(0xFFEEF0F6),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 18,
-                  ),
-                  border: OutlineInputBorder(
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFEEF0F6),
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 12),
+                        child: Image.asset(
+                          "Assets/images/search.png",
+                          height: 24,
+                          width: 24,
+                        ),
+                      ),
+                      const Text(
+                        "Search",
+                        style: TextStyle(
+                          color: Color(0xFFADADAF),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: "inter",
+                          letterSpacing: -1,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
+              )
+
             ),
             const SizedBox(height: 20),
 

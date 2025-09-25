@@ -4,6 +4,7 @@ import 'package:dokan_retailer/Screens/no_found.dart';
 import 'package:dokan_retailer/Screens/splash_screen.dart';
 import 'package:dokan_retailer/providers/cart_provider.dart';
 import 'package:dokan_retailer/providers/category_provider.dart';
+import 'package:dokan_retailer/providers/policies_provider.dart';
 import 'package:dokan_retailer/providers/token_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +16,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => TokenProvider()),
         ChangeNotifierProvider(create: (_) => CategoryProvider()),
+        ChangeNotifierProvider(create: (_) => PolicyProvider()),
       ],
       child: const MyApp(),
     ),

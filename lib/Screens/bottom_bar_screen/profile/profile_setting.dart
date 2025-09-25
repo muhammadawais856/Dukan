@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../../Services/profile.dart';
+import '../../../models/profile.dart';
+import '../../../providers/token_provider.dart';
+  // token provider
 
 class account_setting extends StatefulWidget {
   const account_setting({super.key});
@@ -8,17 +14,50 @@ class account_setting extends StatefulWidget {
 }
 
 class _account_settingState extends State<account_setting> {
-  final TextEditingController nameController =
-  TextEditingController(text: "Muhammad Wajahat");
-  final TextEditingController phoneController =
-  TextEditingController(text: "+92 3140090925");
-  final TextEditingController storeController =
-  TextEditingController(text: "Karwaan General Store");
-  final TextEditingController addressController =
-  TextEditingController(text: "SD-21, North Nazimabad, Karachi");
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController storeController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
 
   String selectedType = "Parchoon";
   final List<String> shopTypes = ["Parchoon", "Wholesale", "Distributor"];
+
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchProfileData();
+  }
+
+  Future<void> fetchProfileData() async {
+    try {
+      final token = Provider.of<TokenProvider>(context, listen: false).getToken();
+      final profileService = ProfileService();
+      final Profile? profile = await profileService.getProfile(token);
+
+      if (profile != null && profile.user != null) {
+        final user = profile.user!;
+
+        setState(() {
+          nameController.text = user.name ?? '';
+          phoneController.text = user.phoneNumber ?? '';
+          storeController.text = user.shopName ?? '';
+          addressController.text = user.shopAddress ?? '';
+
+          // If API has shopType field
+          // selectedType = user.shopType ?? "Parchoon";
+
+          isLoading = false;
+        });
+      } else {
+        setState(() => isLoading = false);
+      }
+    } catch (e) {
+      setState(() => isLoading = false);
+      debugPrint("Error fetching profile: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,25 +70,37 @@ class _account_settingState extends State<account_setting> {
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          "Account Settings",
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
-            color: Colors.black,
-          ),
-        ),
+
       ),
-      body: Column(
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
+                const Text(
+                  "Account Settings",
+                  style: TextStyle(
+                    color: Color(0xff121212),
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "Inter",
+                    letterSpacing: -1,
+                  ),
+                ),
                 const Text(
                   "Please provide following details below",
-                  style: TextStyle(color: Colors.grey, fontSize: 14),
+                  style: TextStyle(
+                    color: Color(0xff949494),
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: "Inter",
+                    letterSpacing: -1,
+                  ),
                 ),
                 const SizedBox(height: 20),
 
@@ -58,12 +109,16 @@ class _account_settingState extends State<account_setting> {
 
                 const SizedBox(height: 12),
 
-                // Phone with WhatsApp Icon
+                // Phone
                 _buildTextField(
                   phoneController,
                   prefix: Padding(
                     padding: const EdgeInsets.all(10.0),
-                    child: Image.asset("Assets/images/flag.png", height: 12,width: 12,),
+                    child: Image.asset(
+                      "Assets/images/flag.png",
+                      height: 12,
+                      width: 12,
+                    ),
                   ),
                 ),
 
@@ -103,17 +158,16 @@ class _account_settingState extends State<account_setting> {
                     },
                   ),
                 ),
-
-
               ],
             ),
           ),
 
           const Spacer(),
 
-          // Buttons
+          // Buttons (unchanged)
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+            padding:
+            const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
             decoration: const BoxDecoration(
               border: Border(
                 top: BorderSide(color: Color(0x33000000)),
@@ -134,12 +188,7 @@ class _account_settingState extends State<account_setting> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) =>confirm_order()),
-                      // );
-                    },
+                    onPressed: () => Navigator.pop(context),
                     child: const Text(
                       "Discard",
                       style: TextStyle(
@@ -152,8 +201,7 @@ class _account_settingState extends State<account_setting> {
                     ),
                   ),
                 ),
-                SizedBox(width: 6,),
-
+                const SizedBox(width: 6),
                 SizedBox(
                   width: 160.5,
                   height: 48,
@@ -166,10 +214,7 @@ class _account_settingState extends State<account_setting> {
                       ),
                     ),
                     onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) =>bill()),
-                      // );
+                      // TODO: Save Changes -> Call Update API
                     },
                     child: const Text(
                       "Save Changes",
